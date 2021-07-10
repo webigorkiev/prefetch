@@ -94,7 +94,7 @@ export const guardToPromiseFn = (
             }
         }
         guardCall.catch(err => reject(err))
-    })
+    });
 };
 
 /**

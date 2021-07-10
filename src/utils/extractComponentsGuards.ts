@@ -17,6 +17,8 @@ import {warn, isRouteComponent, RawRouteComponent, isESModule, Lazy} from "./uti
  * @param app
  * @param to
  * @param from
+ * @param store
+ * @param router
  */
 export function extractComponentsGuards(
     matched: RouteRecordNormalized[],

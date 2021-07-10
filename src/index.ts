@@ -36,7 +36,7 @@ declare module '@vue/runtime-core' {
 /**
  * Fetcher for vue router
  */
-export const createFetcher = (): Plugin => {
+export const createPrefetch = (): Plugin => {
     type Lazy<T> = () => Promise<T> | Promise<Array<Promise<T>>>;
 
     /**
