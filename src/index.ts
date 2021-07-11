@@ -32,11 +32,14 @@ declare module '@vue/runtime-core' {
         prefetch?: NavigationGuardFetchWithThis<undefined>
     }
 }
+interface Prefetch {
+    install(app: App, router: Router, store: Store<any>, name: string):void
+}
 
 /**
  * Fetcher for vue router
  */
-export const createPrefetch = (): Plugin => {
+export const createPrefetch = (): Prefetch => {
     type Lazy<T> = () => Promise<T> | Promise<Array<Promise<T>>>;
 
     /**
