@@ -11,7 +11,9 @@ interface AdditionParams {
     app:App,
     store: Store<any>,
     router: Router,
-    isClient: boolean
+    isClient: boolean,
+    isInitial: boolean,
+    isFetch: boolean
 }
 export declare interface NavigationGuardFetchWithThis<T> {
     (

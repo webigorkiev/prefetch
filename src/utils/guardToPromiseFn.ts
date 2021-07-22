@@ -56,7 +56,14 @@ export const guardToPromiseFn = (
         };
         const guardReturn = guard.call(
             record && record.instances?.[name] as ComponentPublicInstance,
-            {app, store, router, isClient: isBrowser()},
+            {
+                app,
+                store,
+                router,
+                isClient: isBrowser(),
+                isInitial: !from.name,
+                isFetch: !from.name || !isBrowser()
+            },
             to,
             from,
             process.env.NODE_ENV !== 'production' ? canOnlyBeCalledOnce(next, to, from) : next
