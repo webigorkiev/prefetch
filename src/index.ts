@@ -35,7 +35,7 @@ declare module '@vue/runtime-core' {
     }
 }
 interface Prefetch {
-    install(app: App, router: Router, store: Store<any>, name: string):void
+    install(app: App, router: Router, store: Store<any>, name: string):any
 }
 
 /**
