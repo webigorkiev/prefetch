@@ -62,7 +62,7 @@ export const guardToPromiseFn = (
                 router,
                 isClient: isBrowser(),
                 isInitial: !from.name,
-                isFetch: (isBrowser() && from.name) || !isBrowser()
+                isFetch: (isBrowser() && !!from.name) || !isBrowser()
             },
             to,
             from,
