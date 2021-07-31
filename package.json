@@ -1,7 +1,7 @@
 {
   "name": "@vuemod/prefetch",
   "private": true,
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Easily fetch data before rendering a vue component",
   "main": "index.js",
   "scripts": {
