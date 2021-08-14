@@ -1,12 +1,13 @@
 {
   "name": "@vuemod/prefetch",
   "private": true,
-  "version": "1.0.7",
+  "version": "1.0.10",
   "description": "Easily fetch data before rendering a vue component",
   "main": "index.js",
   "scripts": {
-    "build": "node scripts/build.js",
-    "test": "test"
+    "build": "yarn docs && node scripts/build.js",
+    "test": "test",
+    "docs": "typedoc --includeVersion --excludePrivate --out docs src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -29,22 +30,22 @@
     "url": "https://github.com/webigorkiev/prefetch/issues"
   },
   "homepage": "https://github.com/webigorkiev/prefetch#readme",
-  "dependencies": {
-    "vue": "^3.1.5",
-    "vue-router": "^4.0.10",
-    "vuex": "^4.0.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@rollup/plugin-alias": "^3.1.2",
     "@types/jest": "^26.0.23",
-    "@types/node": "^15.14.0",
+    "@types/node": "^16.6.1",
     "chalk": "^4.1.1",
-    "esbuild": "^0.12.14",
+    "esbuild": "^0.12.17",
     "fs-extra": "^10.0.0",
     "rollup": "^2.52.7",
     "rollup-plugin-dts": "^3.0.2",
     "rollup-plugin-esbuild": "^4.5.0",
+    "typedoc": "^0.21.5",
     "typescript": "^4.3.5",
+    "vue": "^3.1.5",
+    "vue-router": "^4.0.10",
+    "vuex": "^4.0.2",
     "zlib": "^1.0.5"
   }
 }

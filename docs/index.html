@@ -1,0 +1,150 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@vuemod/prefetch - v1.0.10</title>
+	<meta name="description" content="Documentation for @vuemod/prefetch - v1.0.10">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">@vuemod/prefetch - v1.0.10</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<h1>@vuemod/prefetch - v1.0.10</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<p align="center">
+					<a href="https://github.com/webigorkiev/prefetch" target="_blank" rel="noopener noreferrer">
+						<img width="180" src="https://github.com/webigorkiev/prefetch/blob/master/logo.svg" alt="@vuemod/prefetch logo">
+					</a>
+				</p>
+				<a href="#vuemodprefetch" id="vuemodprefetch" style="color: inherit; text-decoration: none;">
+					<h1>@vuemod/prefetch</h1>
+				</a>
+				<blockquote>
+					<p>Easily fetch data before rendering a vue component with vue-router and vuex</p>
+				</blockquote>
+				<p>If you&#39;ve used vue-router, vue and vuex, you are familiar with this problem.</p>
+				<blockquote>
+					<p>The beforeRouteEnter guard does NOT have access to this, because the guard is called before the navigation is confirmed ...</p>
+				</blockquote>
+				<p>Of course you can use:</p>
+				<pre><code class="language-typescript"><span style="color: #795E26">beforeRouteEnter</span><span style="color: #000000"> (</span><span style="color: #001080">to</span><span style="color: #000000">, </span><span style="color: #001080">from</span><span style="color: #000000">, </span><span style="color: #001080">next</span><span style="color: #000000">) {</span>
+<span style="color: #000000">  </span><span style="color: #795E26">next</span><span style="color: #000000">(</span><span style="color: #001080">vm</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// access to component instance via `vm`</span>
+<span style="color: #000000">  })</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<p>But, if you use vuex and make a mutation, then the component will be rendered first,
+				and then the data will appear. (The code in the next construct is executed after all hooks).</p>
+				<p>Of course, you can get data centrally in the <strong>beforeResolve</strong> hook, but then if your application grows, you will have to write a separate router ...</p>
+				<p>Plugin adds additional <strong>prefectch</strong> hook (Similar to serverPrefetch) to components, mixins, extended components and global mixins.</p>
+				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+					<h2>Installation</h2>
+				</a>
+				<pre><code class="language-bash"><span style="color: #000000">    yarn add @vuemod/prefetch</span>
+</code></pre>
+				<p>or</p>
+				<pre><code class="language-bash"><span style="color: #000000">    npm i @vuemod/prefetch</span>
+</code></pre>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h2>Usage</h2>
+				</a>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">createPrefetch</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;@vuemod/prefetch&quot;</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// ....</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">prefetch</span><span style="color: #000000"> = </span><span style="color: #795E26">createPrefetch</span><span style="color: #000000">();</span>
+<span style="color: #001080">app</span><span style="color: #000000">.</span><span style="color: #795E26">use</span><span style="color: #000000">(</span><span style="color: #001080">prefetch</span><span style="color: #000000">, </span><span style="color: #001080">router</span><span style="color: #000000">, </span><span style="color: #001080">store</span><span style="color: #000000">);</span>
+
+</code></pre>
+				<a href="#in-components" id="in-components" style="color: inherit; text-decoration: none;">
+					<h3>In components</h3>
+				</a>
+				<pre><code class="language-typescript"><span style="color: #008000">// ...</span>
+<span style="color: #001080">async</span><span style="color: #000000"> </span><span style="color: #795E26">prefetch</span><span style="color: #000000">({</span><span style="color: #001080">app</span><span style="color: #000000">, </span><span style="color: #001080">store</span><span style="color: #000000">, </span><span style="color: #001080">router</span><span style="color: #000000">, </span><span style="color: #001080">isClient</span><span style="color: #000000">, </span><span style="color: #001080">isInitial</span><span style="color: #000000">, </span><span style="color: #001080">isFetch</span><span style="color: #000000">}, </span><span style="color: #001080">to</span><span style="color: #000000">, </span><span style="color: #001080">from</span><span style="color: #000000">, </span><span style="color: #001080">next</span><span style="color: #000000">?) {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// your code</span>
+<span style="color: #000000">}</span>
+<span style="color: #008000">// ...</span>
+</code></pre>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="modules.html">Exports</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/NavigationGuardFetchWithThis.html" class="tsd-kind-icon">Navigation<wbr>Guard<wbr>Fetch<wbr>With<wbr>This</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#createPrefetch" class="tsd-kind-icon">create<wbr>Prefetch</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

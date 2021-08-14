@@ -1,23 +1,30 @@
 {
+  "display": "Node 14",
+
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
+    "strictPropertyInitialization": false,
     "strict": true,
     "jsx": "preserve",
     "sourceMap": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "suppressImplicitAnyIndexErrors": true,
     "removeComments": true,
+    "declaration": true,
+    "outDir": "dist",
+    "baseUrl": ".",
     "lib": [
       "esnext",
       "dom"
     ],
     "types": [
-      "@types/jest"
+      "@types/jest",
+      "node"
     ],
-    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./src/*"
@@ -25,10 +32,9 @@
     }
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "node_modules/@types/node/**/*.d.ts"
+    "./src/*"
+  ],
+  "exclude"        : [
+    "node_modules"
   ]
 }

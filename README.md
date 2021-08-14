@@ -52,7 +52,7 @@ app.use(prefetch, router, store);
 
 ```typescript
 // ...
-async prefetch({app, store, router, isClient}, to, from, next?) {
+async prefetch({app, store, router, isClient, isInitial, isFetch}, to, from, next?) {
     // your code
 }
 // ...
