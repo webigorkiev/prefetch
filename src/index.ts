@@ -9,18 +9,18 @@ import type {NavigationGuardNext, RouteLocationNormalized, RouteLocationRaw} fro
 
 type NavigationGuardNextCallback = (vm: ComponentPublicInstance) => any;
 declare type NavigationGuardReturn = void | Error | RouteLocationRaw | boolean | NavigationGuardNextCallback;
-interface AdditionParams {
+interface AdditionParams<T = Store<any>> {
     app:App,
-    store: Store<any>,
+    store: T,
     router: Router,
     isClient: boolean,
     isInitial: boolean,
     isFetch: boolean
 }
-export type NavigationGuardFetchWithThis<T>  =
+export type NavigationGuardFetchWithThis<T, S = any>  =
     (
         this: T,
-        opt: AdditionParams,
+        opt: AdditionParams<S>,
         to: RouteLocationNormalized,
         from: RouteLocationNormalized,
         next: NavigationGuardNext
@@ -45,6 +45,6 @@ export const createPrefetch = <T = Store<any>>(): Plugin => {
 
 declare module 'vue' {
     interface ComponentCustomOptions {
-        prefetch?: NavigationGuardFetchWithThis<undefined>
+        prefetch?: NavigationGuardFetchWithThis<undefined, any>
     }
 }
