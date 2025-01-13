@@ -8,29 +8,17 @@ import type {
 import type {ComponentPublicInstance, App} from "vue";
 import type {Store} from "vuex";
 import {isRouteLocation, stringifyRoute, warn, isBrowser} from "./utils";
-import type {NavigationGuardFetchWithThis} from "../index";
-
+import type {NavigationGuardFetchWithThis} from "@/index";
 type NavigationGuardNextCallback = (vm: ComponentPublicInstance) => any;
 
-/**
- * Wrapper for navigation guards
- * @param guard
- * @param to
- * @param from
- * @param record
- * @param name
- * @param app
- * @param store
- * @param router
- */
-export const guardToPromiseFn = (
+export const guardToPromiseFn = <T = Store<any>,>(
     guard: NavigationGuardFetchWithThis<ComponentPublicInstance>,
     to: RouteLocationNormalized,
     from: RouteLocationNormalized,
     record: RouteRecordNormalized,
     name: string,
     app: App,
-    store: Store<any>,
+    store: T,
     router: Router
 ): () => Promise<void> => {
     return () => new Promise((resolve, reject) => {
@@ -50,11 +38,10 @@ export const guardToPromiseFn = (
                 if(enterCallbackArray && record?.enterCallbacks?.[name] === enterCallbackArray && typeof valid === 'function') {
                     enterCallbackArray.push(valid)
                 }
-
                 resolve()
             }
         };
-        const guardReturn = guard.call(
+        const guardReturn = guard.call<ComponentPublicInstance, any[], any>(
             record && record.instances?.[name] as ComponentPublicInstance,
             {
                 app,
@@ -69,7 +56,6 @@ export const guardToPromiseFn = (
             process.env.NODE_ENV !== 'production' ? canOnlyBeCalledOnce(next, to, from) : next
         );
         let guardCall = Promise.resolve(guardReturn);
-
         if(guard.length < 4) {
             guardCall = guardCall.then(next)
         }
@@ -77,21 +63,17 @@ export const guardToPromiseFn = (
             const message = `The "next" callback was never called inside of ${
                 guard.name ? '"' + guard.name + '"' : ''
             }:\n${guard.toString()}\n. If you are returning a value instead of calling "next", make sure to remove the "next" parameter from your function.`;
-
             if(typeof guardReturn === 'object' && 'then' in guardReturn) {
                 guardCall = guardCall.then(resolvedValue => {
-
                     // @ts-ignore
                     if(!next._called) {
                         warn(message)
                         return Promise.reject(new Error('Invalid navigation guard'))
                     }
-
                     return resolvedValue
                 })
 
             } else if(guardReturn !== undefined) {
-
                 // @ts-ignore
                 if(!next._called) {
                     warn(message)
@@ -104,33 +86,21 @@ export const guardToPromiseFn = (
     });
 };
 
-/**
- * Next function called only once
- * @param next
- * @param to
- * @param from
- */
 function canOnlyBeCalledOnce(
     next: NavigationGuardNext,
     to: RouteLocationNormalized,
     from: RouteLocationNormalized
 ): NavigationGuardNext {
     let called = 0;
-
     return function() {
-
         if(called++ === 1) {
             warn(
                 `The "next" callback was called more than once in one navigation guard when going from "${from.fullPath}" to "${to.fullPath}". It should be called exactly one time in each navigation guard. This will fail in production.`
             )
         }
-
         // @ts-expect-error: we put it in the original one because it's easier to check
         next._called = true;
-
         if(called === 1) {
-
-            // eslint-disable-next-line prefer-spread,prefer-rest-params
             next.apply(null, arguments as any)
         }
     }

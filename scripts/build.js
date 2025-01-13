@@ -17,7 +17,6 @@ const external = [
     ...Object.keys(pkg.devDependencies || {}),
     ...["path", "fs"]
 ];
-// console.log(root);
 
 (async() => {
     log(chalk.green.bold("Start build bundle"));
@@ -34,7 +33,8 @@ const external = [
         spaces: 2
     });
     log("Copy files to dist dir");
-    await buildPlugin(root);
+    await buildPlugin(root, "cjs", "./index.cjs");
+    await buildPlugin(root, "es", "./index.mjs");
     log("Build plugin");
     await buildTypes(root);
     log("Build types");
@@ -42,11 +42,7 @@ const external = [
     await checkFileSize("./dist/index.js");
 })();
 
-/**
- * Build bundle by rollup
- * @returns {Promise<void>}
- */
-const buildPlugin = async(root) => {
+const buildPlugin = async(root, format = "cjs", file = "./index.js") => {
     const bundle = await rollup.rollup({
         input: ["./src/index.ts"],
         external,
@@ -62,17 +58,13 @@ const buildPlugin = async(root) => {
         ]
     });
     await bundle.write({
-        dir: root,
-        format: "cjs",
-        exports: "auto"
+        format,
+        exports: "auto",
+        file: path.resolve(root, file),
     });
     await bundle.close();
 };
 
-/**
- * Build types
- * @returns {Promise<void>}
- */
 const buildTypes = async(root) => {
     const bundle = await rollup.rollup({
         input: ["./src/index.ts"],
@@ -93,13 +85,7 @@ const buildTypes = async(root) => {
     await bundle.close();
 };
 
-/**
- * Check size of file
- * @param filePath
- * @returns {Promise<void>}
- */
 const checkFileSize = async(filePath) => {
-
     if(!fs.existsSync(filePath)) {
         return;
     }
@@ -107,7 +93,6 @@ const checkFileSize = async(filePath) => {
     const minSize = (file.length / 1024).toFixed(2) + 'kb';
     const gzipped = gzipSync(file);
     const gzippedSize = (gzipped.length / 1024).toFixed(2) + 'kb';
-
     log(
         `${chalk.gray(
             chalk.bold(path.basename(filePath))

@@ -1,6 +1,5 @@
 {
   "display": "Node 14",
-
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
@@ -12,9 +11,9 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "suppressImplicitAnyIndexErrors": true,
     "removeComments": true,
     "declaration": true,
+    "skipLibCheck": true,
     "outDir": "dist",
     "baseUrl": ".",
     "lib": [
@@ -22,7 +21,6 @@
       "dom"
     ],
     "types": [
-      "@types/jest",
       "node"
     ],
     "paths": {
@@ -32,9 +30,9 @@
     }
   },
   "include": [
-    "./src/*"
+    "./src/**/*.ts"
   ],
-  "exclude"        : [
+  "exclude": [
     "node_modules"
   ]
 }
