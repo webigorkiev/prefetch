@@ -13,9 +13,9 @@ interface AdditionParams<T = Store<any>> {
     app:App,
     store: T,
     router: Router,
-    isClient: boolean,
-    isInitial: boolean,
-    isFetch: boolean
+    isClient: boolean, // Execute in client mode
+    isInitial: boolean, // Execute in initial navigation (server or client)
+    isFetch: boolean // Execute in fetch mode (client and first navigation or server)
 }
 export type NavigationGuardFetchWithThis<T, S = any>  =
     (
@@ -26,18 +26,35 @@ export type NavigationGuardFetchWithThis<T, S = any>  =
         next: NavigationGuardNext
     ) =>  NavigationGuardReturn | Promise<NavigationGuardReturn>;
 export const createPrefetch = <T = Store<any>>(): Plugin => {
-    type Lazy<T> = () => Promise<T> | Promise<Array<Promise<T>>>;
-    function runGuardQueue(guards: Lazy<any>[]): Promise<void> {
-        return guards.reduce((promise, guard) => {
-            const promises = Array.isArray(promise) ? promise : [promise]
-            return Promise.all(promises).then(() => guard())
-        }, Promise.resolve())
+    type Lazy = () => (Promise<void> | Promise<Promise<void>[]>);
+    async function runGuardQueue(
+        guards: Lazy[] // Найденные loaders
+    ): Promise<void> {
+        for(const guard of guards) {
+            const result = await guard();
+            if (Array.isArray(result)) {
+                await Promise.all(result);
+            }
+        }
     }
     return {
-        install: (app: App, router: Router, store: T, name: string = "prefetch") => {
+        install: (
+            app: App, // Instance of the app
+            router: Router, // Instance of the router
+            store: T, // Instance of the store|pinia
+            name: string = "prefetch" // Special name for loaders
+        ) => {
             router.beforeResolve(async(to, from) => {
-                const guards = extractComponentsGuards<T>(to.matched, name, app, to, from, store, router);
-                await runGuardQueue(guards);
+                const guards = extractComponentsGuards<T>(
+                    to.matched,
+                    name,
+                    app,
+                    to,
+                    from,
+                    store,
+                    router
+                );
+                await runGuardQueue(guards); // Запуск полученных loaders
             });
         }
     }

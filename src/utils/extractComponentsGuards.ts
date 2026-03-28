@@ -10,6 +10,7 @@ import type {Store} from "vuex";
 import {guardToPromiseFn} from "./guardToPromiseFn"
 import {warn, isRouteComponent, RawRouteComponent, isESModule, Lazy} from "./utils";
 
+// Select and extract the loaders from the route's components
 export function extractComponentsGuards<T = Store<any>>(
     matched: RouteRecordNormalized[],
     guardType: string,
@@ -19,13 +20,11 @@ export function extractComponentsGuards<T = Store<any>>(
     store: T,
     router: Router
 ) {
-    const guards: Array<() => Promise<void> | Promise<Array<Promise<void>>>> = [];
+    const guards: (() => (Promise<void> | Promise<Promise<void>[]>))[] = [];
     const globalMixins = [...app._context.mixins];
     for(const record of matched) {
         for(const name in record.components) {
-            let rawComponent = record.components[name] as RawRouteComponent & {
-                _context?: any
-            };
+            let rawComponent = record.components[name] as RawRouteComponent & {_context?: any};
             if(process.env.NODE_ENV !== 'production') {
                 if(!rawComponent || (typeof rawComponent !== 'object' && typeof rawComponent !== 'function')) {
                     warn(`Component "${name}" in record with path "${record.path}" is not` +
