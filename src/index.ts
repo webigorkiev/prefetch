@@ -25,6 +25,9 @@ export type NavigationGuardFetchWithThis<T, S = any>  =
         from: RouteLocationNormalized,
         next: NavigationGuardNext
     ) =>  NavigationGuardReturn | Promise<NavigationGuardReturn>;
+
+// create a field like beforeRouteEnter, but on beforeResolve stage. Prefetch.
+// TODO try defineOptions
 export const createPrefetch = <T = Store<any>>(): Plugin => {
     type Lazy = () => (Promise<void> | Promise<Promise<void>[]>);
     async function runGuardQueue(
