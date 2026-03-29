@@ -6,12 +6,14 @@ import type {
     RouteLocationNormalizedLoaded,
     RouteComponent
 } from "vue-router";
-import type {Store} from "vuex";
 import {guardToPromiseFn} from "./guardToPromiseFn"
 import {warn, isRouteComponent, RawRouteComponent, isESModule, Lazy} from "./utils";
 
+import type {Store} from "vuex";
+import type {Pinia} from "pinia";
+
 // Select and extract the loaders from the route's components
-export function extractComponentsGuards<T = Store<any>>(
+export function extractComponentsGuards<T = Store<any>|Pinia>(
     matched: RouteRecordNormalized[],
     guardType: string,
     app: App,

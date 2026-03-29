@@ -6,12 +6,16 @@ import type {
     RouteRecordNormalized
 } from "vue-router";
 import type {ComponentPublicInstance, App} from "vue";
-import type {Store} from "vuex";
+
 import {isRouteLocation, stringifyRoute, warn, isBrowser} from "./utils";
 import type {NavigationGuardFetchWithThis} from "@/index";
+
+import type {Store} from "vuex";
+import type {Pinia} from "pinia";
+
 type NavigationGuardNextCallback = (vm: ComponentPublicInstance) => any;
 
-export const guardToPromiseFn = <T = Store<any>,>(
+export const guardToPromiseFn = <T = Store<any>|Pinia,>(
     guard: NavigationGuardFetchWithThis<ComponentPublicInstance>,
     to: RouteLocationNormalized,
     from: RouteLocationNormalized,

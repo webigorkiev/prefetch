@@ -1,5 +1,6 @@
 import type {App, Plugin} from "vue";
 import type {Store} from "vuex";
+import type {Pinia} from "pinia";
 import type {
     Router
 } from "vue-router";
@@ -26,9 +27,11 @@ export type NavigationGuardFetchWithThis<T, S = any>  =
         next: NavigationGuardNext
     ) =>  NavigationGuardReturn | Promise<NavigationGuardReturn>;
 
+// Creator for prefetch field
+export const definePrefetch = (fn: NavigationGuardFetchWithThis<any, Pinia|Store<any>>) => fn;
+
 // create a field like beforeRouteEnter, but on beforeResolve stage. Prefetch.
-// TODO try defineOptions
-export const createPrefetch = <T = Store<any>>(): Plugin => {
+export const createPrefetch = <T = Store<any>|Pinia>(): Plugin => {
     type Lazy = () => (Promise<void> | Promise<Promise<void>[]>);
     async function runGuardQueue(
         guards: Lazy[] // Найденные loaders

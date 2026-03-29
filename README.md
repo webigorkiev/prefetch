@@ -7,7 +7,7 @@
 # @vuemod/prefetch
 > Easily fetch data before rendering a vue component with vue-router and vuex
 
-If you've used vue-router, vue and vuex, you are familiar with this problem.
+If you've used vue-router, vue and vuex or pinia, you are familiar with this problem.
 
 > The beforeRouteEnter guard does NOT have access to this, because the guard is called before the navigation is confirmed ...
 
@@ -39,6 +39,8 @@ or
 
 ## Usage
 
+### In app initialization
+
 ```typescript
 import {createPrefetch} from "@vuemod/prefetch";
 
@@ -51,9 +53,16 @@ app.use(prefetch, router, store);
 ### In components
 
 ```typescript
-// ...
-async prefetch({app, store, router, isClient, isInitial, isFetch}, to, from, next?) {
-    // your code
-}
-// ...
+export default defineComponent({
+    prefetch: definePrefetch(async({
+       app,  // Instance of the app
+       store, // Instance of the store|pinia
+       router, // Instance of the router
+       isClient,  // Execute on client
+       isInitial,  // Execute in initial navigation (server or client)
+       isFetch // Execute in fetch mode (client and first navigation or server)
+   }, to, from, next?) => { 
+        // your code
+    })
+});
 ```
